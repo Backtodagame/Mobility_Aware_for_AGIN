@@ -14,7 +14,9 @@ Repository này có tham khảo code từ link: https://github.com/minhnguyen278
 ![Architecture](assets/training_learning_curve.png)
 
 4. Đánh giá mô hình qua kịch bản test (Test phase)
-<video src="assets/trained_uav_policy.mp4" width="800" autoplay loop muted controls></video>
+a. Clip Demo
+https://github.com/user-attachments/assets/5ac155b0-0060-44e8-8ef6-17da6cdd2ade
+b. Các kết quả đáng chú ý (Outstanding results)
 ![Architecture](assets/evaluation_metrics.png)
 ![Architecture](assets/ruav_vs_cfso.png)
 
