@@ -8,14 +8,14 @@ Repository này có tham khảo code từ link: https://github.com/minhnguyen278
 1. Kiến trúc về AGIN (AGIN Architecture)
 ![Architecture](assets/AGIN%20architecture.png)
 
-2. Biểu đồ phần thưởng 2000 episode (Episode Reward)
+2. Tệp train tại Channel_Modeling\train_update_obs_vec.py
+
+3. Biểu đồ phần thưởng 2000 episode (Episode Reward)
 ![Architecture](assets/training_learning_curve.png)
 
-3. Đánh giá mô hình qua kịch bản test (Test phase)
-![Architecture](assets/trained_uav_policy.mp4)
+4. Đánh giá mô hình qua kịch bản test (Test phase)
+<video src="assets/trained_uav_policy.mp4" width="800" autoplay loop muted controls></video>
 ![Architecture](assets/evaluation_metrics.png)
 ![Architecture](assets/ruav_vs_cfso.png)
-
-# Tệp train và đánh giá tại: Channel_Modeling\train_update_obs_vec.py
 
 
