@@ -1,0 +1,13 @@
+**/Check_Coding
+**/Related_Paper
+**/__pycache__
+**/save
+**/results
+**/kaggle_1
+Channel_Modeling/Channel_FSO_old.py
+Channel_Modeling/Channel_FSO_old2.py
+Channel_Modeling/train_debug.py
+Channel_Modeling/train_update0.py
+Channel_Modeling/System_Modeling_old.py
+Channel_Modeling/create_cloud.py
+**/save_models
