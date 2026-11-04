@@ -23,6 +23,8 @@ b. Tệp train 1 phần tại Channel_Modeling/train.ipynb (test episode tại p
 
 a. Clip Demo
 
+https://github.com/user-attachments/assets/584fc1ac-47b2-4641-9a6b-167406c55653
+
 b. Các kết quả đáng chú ý (Outstanding results)
 
 - Kết quả test
