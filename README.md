@@ -15,8 +15,15 @@ b. Tệp train 1 phần tại Channel_Modeling/train.ipynb (test episode cho ph�
 3. Biểu đồ phần thưởng 2000 episode (Episode Reward)
 ![Architecture](assets/training_learning_curve.png)
 
+<<<<<<< HEAD
 4. Đánh giá mô hình qua kịch bản test (Test phase), chúng tôi chọn lựa tại episode 1250 vì cho phần thưởng cao nhất dựa trên biểu đồ phần thưởng
 <video src="assets/trained_uav_policy.mp4" width="800" autoplay loop muted controls></video>
+=======
+4. Đánh giá mô hình qua kịch bản test (Test phase)
+   
+a. Clip Demo
+
+b. Các kết quả đáng chú ý (Outstanding results)
 ![Architecture](assets/evaluation_metrics.png)
 ![Architecture](assets/total_RUAV_CFSO.png)
 ![Architecture](assets/individual_RUAV_CFSO.png)
