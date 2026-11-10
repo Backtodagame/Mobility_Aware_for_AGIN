@@ -119,36 +119,4 @@ def cal_R_FP_batch(ue_pos_t, fp_pos,base_station='uav',device='cuda',
 
 
 if __name__ =="__main__":
-    import System_Modeling_mmWave as SM 
-    
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    user_pos = SM.simulate_user_mobility(n_users,5,debug=True)
-    uav_pos_prev = torch.tensor([[200,200,250],
-                                 [500,500,250],
-                                 [1200,1200,250]],device=device)   
-    uav_pos_t = torch.tensor([[200,220,250],
-                              [500,520,250],
-                              [1180,1200,250]
-                            ],device=device)
-    all_uav_rates = cal_R_FP_batch(user_pos[:,0,:],uav_pos_t,base_station='uav')
-
-    hap_pos = torch.tensor([800,800,20e3],device=device)
-
-    hap_rate =cal_R_FP_batch(user_pos[:,0,:],hap_pos,base_station='hap')
-    print(f"all uav rates\n{all_uav_rates.mean()}")
-    # print(all_uav_rates - hap_rate)
-    print(f"hap_rate {hap_rate.mean()}")
-
-    # print(rate-hap_rate)
-
-
-    a =torch.tensor([[2,2],
-         [2,2]])
-
-    b =torch.tensor([[1,3],
-         [4,6]])
-
-    print(a*b)
-
-    print(cal_dbW(30)) 
     pass 

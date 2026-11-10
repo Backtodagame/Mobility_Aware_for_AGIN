@@ -14,6 +14,7 @@ from Parameters import *
 import os 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+# Định nghĩa các tham số cho việc huấn luyện ở đây 
 action_size = 5
 STEP  = 20 
 batch_size = 64
@@ -27,8 +28,7 @@ epsilon_decay  = (epsilon_start - epsilon_min) / (1/6 * n_episodes * n_steps)
 # 2/3 total step is exploration, the rest of step is exploitation
 # epsilon_start - (2/3 * n_episodes * n_steps * x ) < epsilon_min => x = 2.375e-5
 learning_rate = 1e-3
-n_uavs = 3
-n_users = 200
+
 
 class DQN(nn.Module):
     """

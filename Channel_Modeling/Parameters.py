@@ -7,18 +7,8 @@ n_uavs = 3
 n_cells = map_maximum_xy_axis // map_cell_size
 
 #   DQN :
-action_size = 5
 STEP  = 20 
-batch_size = 64
-gamma = 0.99 # discounted factor
-epsilon_start = 1.0
-epsilon_min = 0.05
-n_episodes = 2501
-n_steps = 300
-epsilon_decay  = (epsilon_start - epsilon_min) / (2/3 * n_episodes * n_steps)  
-# 2/3 total step is exploration, the rest of step is exploitation
-# epsilon_start - (2/3 * n_episodes * n_steps * x ) < epsilon_min => x = 2.375e-5
-learning_rate = 1e-3
+
 
 
 #   Free Space Optical Channel:
