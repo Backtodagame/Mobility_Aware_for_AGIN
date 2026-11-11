@@ -85,38 +85,7 @@ def cal_R_FP_batch(ue_pos_t, fp_pos,base_station='uav',device='cuda',
 
 
 
-
-# def cal_R_UAV_batch_mmWave(
-#         uav_pos_t, uav_pos_prev, user_pos_t,user_pos_prev, t, 
-#         B=400e6, fc=28e9, delta_f=120e3, c=3e8):
-
-#     with torch.no_grad():
-#         d_2d = torch.linalg.norm(user_pos_t[:, :2].unsqueeze(1) - uav_pos_t[:, :2].unsqueeze(0), dim=2)
-#         d_3d = torch.sqrt(d_2d**2 + uav_z**2)
-#         P_los = cal_probability_having_LoS(uav_z, d_2d )
-#         avg_eta = cal_avg_pathloss(dist_3d=d_3d, p_LoS=P_los, current_fc=fc)
-#         Prx_w = cal_dbW(UAV_P_RF) * 10 **(-avg_eta/10)
-
-#         if t>0: 
-#             user_v_3d = user_pos_t- user_pos_prev
-#         else :
-#             user_v_3d = torch.zeros_like(user_pos_t)        
-#         uav_v_3d = uav_pos_t - uav_pos_prev
-#         v_rel_vector_3d = uav_v_3d.unsqueeze(0) - user_v_3d.unsqueeze(1)
-#         los_vector_3d = uav_pos_t.unsqueeze(0) - user_pos_t.unsqueeze(1)
-#         d_3d_tensor = torch.linalg.norm(los_vector_3d,dim=2, keepdim=True)
-#         unit_los_vector = los_vector_3d / (d_3d_tensor + 1e-9)
-#         v_radial = torch.sum(v_rel_vector_3d * unit_los_vector, dim=2)
-#         v_radial_mag = torch.abs(v_radial)
-#         fd = v_radial_mag * fc  / c 
-#         ici_factor = (torch.pi**2/3.0) * (fd/delta_f)**2
-#         P_ici = Prx_w * ici_factor
-#         N0_W = cal_dbW(N0)
-#         SINR = Prx_w / (N0_W + P_ici)
-#         rate = (B/n_users) * torch.log2(1+SINR)
-
-#         return rate
-
-
 if __name__ =="__main__":
+    
+
     pass 

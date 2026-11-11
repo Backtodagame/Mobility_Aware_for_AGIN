@@ -3,3 +3,6 @@
 Channel_Modeling/debug2.py
 **/save_models
 Channel_Modeling/train_PPO.py
+Channel_Modeling/train_draft1.py
+Channel_Modeling/train_draft2.ipynb 
+Channel_Modeling/compare_three_case.py

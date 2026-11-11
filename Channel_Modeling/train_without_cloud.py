@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+# from System_Modeling_update_obs_vec import * 
 from collections import deque
 from tqdm import trange 
 import random 
@@ -10,25 +11,27 @@ import matplotlib.patches as patches
 import numpy as np
 import torch.nn.functional as F
 import Channel_FSO as ch_fso 
+# import Channel_RF as ch_rf
 from Parameters import *
 import os 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Định nghĩa các tham số cho việc huấn luyện ở đây 
 action_size = 5
 STEP  = 20 
 batch_size = 64
 gamma = 0.99 # discounted factor
 epsilon_start = 1.0
 epsilon_min = 0.05
-n_episodes = 501
+n_episodes = 2001
 n_steps = 300
-n_steps_test=400
-epsilon_decay  = (epsilon_start - epsilon_min) / (1/6 * n_episodes * n_steps)  
-# 2/3 total step is exploration, the rest of step is exploitation
-# epsilon_start - (2/3 * n_episodes * n_steps * x ) < epsilon_min => x = 2.375e-5
-learning_rate = 1e-3
+n_steps_test=1000
+exploration_time = 1/4
 
+epsilon_decay  = (epsilon_start - epsilon_min) / (exploration_time * n_episodes * n_steps)  
+
+learning_rate = 1e-3
+n_uavs = 3
+n_users = 200
 
 class DQN(nn.Module):
     """
@@ -420,35 +423,6 @@ def perform_user_association(uav_pos, user_pos_t, region_t, HAP_position, device
         return alpha, beta, RUAV, CFSO
                 
 
-def build_observation_vector(uav_pos, user_pos_t, cell_clwc_t, alpha, beta, device="cuda"):
-    """
-    Build the observation input vector (a.k.a Observation Space)
-
-    Args: 
-        uav_pos  (( num_uav, 3)) : Position of each UAV in 3 dimensions torch
-        user_pos_t : Position of users in a specific time step
-        cell_clwc_t (( n_cells, n_cells)): cell clwc value
-        alpha    (( num_users, num_uav))
-        beta     (num_uav) 
-    Returns:
-        Observation space vector with shape torch.Tensor ((3,130))
-    """
-
-    obs_list = []
-    normalized_uav_xy = uav_pos[:,:2] / map_maximum_xy_axis
-    
-    for i in range(n_uavs):
-        served_mask = (alpha[:, i] ==1 ) | (beta ==1)   # | is OR operator        
-        served_users_xy = user_pos_t[served_mask]
-        user_heatmap = build_user_heatmap(served_users_xy) 
-        other_uav_pos = torch.cat([normalized_uav_xy[:i], normalized_uav_xy[i+1:]])
-        obs_vector  = torch.concatenate([normalized_uav_xy[i],other_uav_pos.flatten(), user_heatmap.flatten(), cell_clwc_t.flatten()])
-        obs_list.append(obs_vector)
-    obs_batch = torch.stack(obs_list, axis=0)
-
-    return obs_batch
-
-
 def calculate_rewards(RUAV, CFSO, uav_pos, Rthres=0.6e9, w=0.3 , p=0.5, device ="cuda"):
     """
     Reward Function: 
@@ -555,7 +529,7 @@ def build_observation_vector(uav_pos, user_pos_t, cell_clwc_t, alpha, beta, devi
             served_users_xy = user_pos_t[served_mask]
             user_heatmap = build_user_heatmap(served_users_xy) 
             other_uav_pos = torch.cat([normalized_uav_xy[:i], normalized_uav_xy[i+1:]])
-            obs_vector  = torch.concatenate([normalized_uav_xy[i],other_uav_pos.flatten(), user_heatmap.flatten(), cell_clwc_t.flatten()])
+            obs_vector  = torch.concatenate([normalized_uav_xy[i],other_uav_pos.flatten(), user_heatmap.flatten()])
             obs_list.append(obs_vector)
         obs_batch = torch.stack(obs_list, axis=0)
 
@@ -564,8 +538,8 @@ def build_observation_vector(uav_pos, user_pos_t, cell_clwc_t, alpha, beta, devi
 def train(device=device):
 
     total_cells = (map_maximum_xy_axis // map_cell_size) **2
-    Q_nets = [DQN(2*n_uavs+total_cells*2,action_size).to(device) for i in range(n_uavs)]   #    2 + total_cells**2 is equal the number of length [x_uav, y_uav, user heatmap, cloud heatmap]
-    target_Q_nets = [DQN(2*n_uavs+total_cells*2,action_size).to(device) for i in range(n_uavs)]
+    Q_nets = [DQN(2*n_uavs+total_cells,action_size).to(device) for i in range(n_uavs)]   #    2 + total_cells**2 is equal the number of length [x_uav, y_uav, user heatmap, cloud heatmap]
+    target_Q_nets = [DQN(2*n_uavs+total_cells,action_size).to(device) for i in range(n_uavs)]
 
     for i in range(n_uavs):
         target_Q_nets[i].load_state_dict(Q_nets[i].state_dict())
@@ -693,7 +667,7 @@ def train(device=device):
 
 def evaluate_trained_policy(
     device=device, 
-    save_dir = "/kaggle/working/save_models",
+    save_dir = '/kaggle/working/save_models',
     episode_to_load =str(n_episodes-1),
     n_steps_test= n_steps_test
 ):
@@ -718,7 +692,7 @@ def evaluate_trained_policy(
         uav_traj: uav trajectory 
     """
     total_cells = (map_maximum_xy_axis // map_cell_size) **2
-    Q_nets = [DQN(2*n_uavs+total_cells*2,action_size).to(device) for i in range(n_uavs)]   #    2 + total_cells**2 is equal the number of length [x_uav, y_uav, user heatmap, cloud heatmap]
+    Q_nets = [DQN(2*n_uavs+total_cells,action_size).to(device) for i in range(n_uavs)]   #    2 + total_cells**2 is equal the number of length [x_uav, y_uav, user heatmap, cloud heatmap]
 
     for i in range(n_uavs):
         path = f"{save_dir}/q_net_uav{i}_ep{episode_to_load}.pt"
